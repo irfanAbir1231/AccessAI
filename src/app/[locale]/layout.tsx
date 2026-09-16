@@ -78,7 +78,7 @@ export async function generateMetadata({
     },
     description: landing('heroBody'),
     applicationName: t('appName'),
-    icons: { icon: '/accessai-logo.svg', shortcut: '/accessai-logo.svg' },
+    icons: { icon: '/nagorik-shathi-logo.svg', shortcut: '/nagorik-shathi-logo.svg' },
     formatDetection: { telephone: true, address: false, email: false },
     alternates: {
       languages: {

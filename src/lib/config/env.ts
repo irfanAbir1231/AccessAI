@@ -170,7 +170,7 @@ const schema = z.object({
   SMTP_PORT: int(587),
   SMTP_USER: optionalStr,
   SMTP_PASSWORD: optionalStr,
-  SMTP_FROM: strDefault('AccessAI <no-reply@accessai.local>'),
+  SMTP_FROM: strDefault('Nagorik Shathi <no-reply@accessai.local>'),
 
   /** Web Push is optional; without both keys the app remains in-app only. */
   WEB_PUSH_PUBLIC_KEY: optionalStr,
@@ -183,7 +183,7 @@ const schema = z.object({
   S3_SECRET_KEY: optionalStr,
   S3_ENDPOINT: optionalStr,
 
-  NEXT_PUBLIC_APP_NAME: strDefault('AccessAI'),
+  NEXT_PUBLIC_APP_NAME: strDefault('Nagorik Shathi'),
 
   RATE_LIMIT_WINDOW_MS: int(60_000),
   RATE_LIMIT_MAX_REQUESTS: int(120),

@@ -1,8 +1,8 @@
 {
-  "name": "accessai",
+  "name": "nagorik-shathi",
   "version": "1.0.0",
   "private": true,
-  "description": "AccessAI — Bangladesh's AI Opportunity Intelligence Platform",
+  "description": "Nagorik Shathi — Bangladesh's AI Opportunity Intelligence Platform",
   "engines": {
     "node": ">=20.9.0"
   },

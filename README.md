@@ -1,4 +1,4 @@
-# AccessAI
+# Nagorik Shathi
 
 **Bangladesh's AI Opportunity Intelligence Platform** — a working prototype.
 
@@ -16,7 +16,7 @@ Everything below is copy-pasteable. **Node 20.9+** and **git** are the only prer
 database server, no Redis, no Docker, no API keys.
 
 ```bash
-git clone https://github.com/i-am-mushfiq/AccessAI.git
+git clone https://github.com/irfanAbir1231/AccessAI.git
 cd AccessAI
 
 npm install

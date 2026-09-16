@@ -1,4 +1,4 @@
-/* AccessAI's small, dependency-free web push worker. */
+/* Nagorik Shathi's small, dependency-free web push worker. */
 self.addEventListener('push', (event) => {
   let data = {};
   try {
@@ -8,7 +8,7 @@ self.addEventListener('push', (event) => {
   }
 
   event.waitUntil(
-    self.registration.showNotification(data.title ?? 'AccessAI', {
+    self.registration.showNotification(data.title ?? 'Nagorik Shathi', {
       body: data.body ?? '',
       tag: data.tag ?? 'accessai-notification',
       data: { actionUrl: data.actionUrl ?? '/bn/notifications' },

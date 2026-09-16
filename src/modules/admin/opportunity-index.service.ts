@@ -46,7 +46,7 @@ export async function indexOpportunity(opportunityId: string): Promise<number> {
     textContent: `${bodyEn}\n\n---\n\n${bodyBn}`,
     embeddingStatus: 'pending',
     verificationStatus: o.verificationStatus,
-    licenseNote: 'Authored summary maintained in the AccessAI admin portal.',
+    licenseNote: 'Authored summary maintained in the Nagorik Shathi admin portal.',
   }).returning();
 
   const chunks = [...chunkText(bodyEn), ...chunkText(bodyBn)];

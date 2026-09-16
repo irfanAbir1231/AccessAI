@@ -216,7 +216,7 @@ export const organizations = sqliteTable(
     lng: real('lng'),
     officeHours: text('office_hours'),
     officeHoursBn: text('office_hours_bn'),
-    /** Distinct from verificationStatus: does AccessAI vouch for the entity. */
+    /** Distinct from verificationStatus: does Nagorik Shathi vouch for the entity. */
     verified: integer('verified', { mode: 'boolean' }).notNull().default(false),
     verificationStatus: text('verification_status', { enum: VERIFICATION_STATUSES })
       .notNull().default('unverified_sample'),

@@ -29,7 +29,7 @@ describe('guided app tour', () => {
 
   it('starts only on request and pauses with Escape, preserving progress', async () => {
     setup(); fireEvent.click(screen.getAllByRole('button', { name: 'App tour' })[0]!);
-    expect(await screen.findByRole('heading', { name: 'Welcome to AccessAI' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Welcome to Nagorik Shathi' })).toBeInTheDocument();
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(readTourProgress(sessionStorage.getItem('accessai-app-tour-v1'))?.paused).toBe(true);

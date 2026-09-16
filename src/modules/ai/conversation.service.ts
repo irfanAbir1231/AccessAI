@@ -551,7 +551,7 @@ async function renderWithModel(
 
   const historyBlock = history
     .slice(-4)
-    .map((m) => `${m.role === 'user' ? 'Citizen' : 'AccessAI'}: ${m.content.slice(0, 400)}`)
+    .map((m) => `${m.role === 'user' ? 'Citizen' : 'Nagorik Shathi'}: ${m.content.slice(0, 400)}`)
     .join('\n');
 
   const userPrompt =
