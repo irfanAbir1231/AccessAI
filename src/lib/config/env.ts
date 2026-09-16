@@ -36,34 +36,53 @@ const optionalStr = z
   .optional()
   .transform((v) => (v && v.trim().length > 0 ? v.trim() : undefined));
 
-const schema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+/**
+ * A blank env var (set but empty — common on Vercel/dashboard-managed hosts
+ * that store an "unset" optional as `""` rather than omitting the key
+ * entirely) must fall back to default exactly like an actually-unset var.
+ * Zod's own `.default()` only fires on `undefined`, so every field below
+ * that needs a default pre-empties `''` to `undefined` before the real
+ * schema runs.
+ */
+const withEmptyAsUndefined = (schema: z.ZodTypeAny) =>
+  z.preprocess((v) => (v === '' ? undefined : v), schema);
 
-  DATABASE_URL: nonEmpty.default('file:./data/accessai.db'),
+const strDefault = (def: string) => withEmptyAsUndefined(nonEmpty.default(def));
+
+const enumDefault = <T extends readonly [string, ...string[]]>(values: T, def: T[number]) =>
+  withEmptyAsUndefined(z.enum(values).default(def));
+
+const optionalEnum = <T extends readonly [string, ...string[]]>(values: T) =>
+  withEmptyAsUndefined(z.enum(values).optional());
+
+const schema = z.object({
+  NODE_ENV: enumDefault(['development', 'test', 'production'] as const, 'development'),
+
+  DATABASE_URL: strDefault('file:./data/accessai.db'),
   DATABASE_AUTH_TOKEN: optionalStr,
 
-  JWT_SECRET: nonEmpty.default('dev-only-access-secret-change-me-0000000000000000'),
-  JWT_REFRESH_SECRET: nonEmpty.default('dev-only-refresh-secret-change-me-000000000000000'),
-  ACCESS_TOKEN_TTL: nonEmpty.default('15m'),
-  REFRESH_TOKEN_TTL: nonEmpty.default('30d'),
+  JWT_SECRET: strDefault('dev-only-access-secret-change-me-0000000000000000'),
+  JWT_REFRESH_SECRET: strDefault('dev-only-refresh-secret-change-me-000000000000000'),
+  ACCESS_TOKEN_TTL: strDefault('15m'),
+  REFRESH_TOKEN_TTL: strDefault('30d'),
 
   /**
    * Forces a provider regardless of which keys are present. Without it, the
    * first configured key wins in a fixed order, which is surprising on a machine
    * that happens to have two keys in its environment.
    */
-  AI_PROVIDER: z.enum(['anthropic', 'openai', 'deepseek', 'simulated']).optional(),
+  AI_PROVIDER: optionalEnum(['anthropic', 'openai', 'deepseek', 'simulated'] as const),
 
   ANTHROPIC_API_KEY: optionalStr,
   OPENAI_API_KEY: optionalStr,
   DEEPSEEK_API_KEY: optionalStr,
-  ANTHROPIC_MODEL: nonEmpty.default('claude-sonnet-5'),
-  OPENAI_MODEL: nonEmpty.default('gpt-4.1-mini'),
-  OPENAI_EMBEDDING_MODEL: nonEmpty.default('text-embedding-3-small'),
+  ANTHROPIC_MODEL: strDefault('claude-sonnet-5'),
+  OPENAI_MODEL: strDefault('gpt-4.1-mini'),
+  OPENAI_EMBEDDING_MODEL: strDefault('text-embedding-3-small'),
 
-  DEEPSEEK_MODEL: nonEmpty.default('deepseek-v4-flash'),
+  DEEPSEEK_MODEL: strDefault('deepseek-v4-flash'),
   /** OpenAI-compatible base URL. Override for a proxy or a regional endpoint. */
-  DEEPSEEK_BASE_URL: nonEmpty.default('https://api.deepseek.com/v1'),
+  DEEPSEEK_BASE_URL: strDefault('https://api.deepseek.com/v1'),
   /**
    * Whether the model produces a chain of thought. Values are the ones the API
    * actually accepts, verified against the live endpoint: `adaptive` (the
@@ -83,12 +102,12 @@ const schema = z.object({
    *    Storing one beside a benefits decision would put rejected reasoning into
    *    an audit trail that is supposed to be defensible.
    */
-  DEEPSEEK_THINKING: z.enum(['disabled', 'adaptive', 'enabled']).default('disabled'),
+  DEEPSEEK_THINKING: enumDefault(['disabled', 'adaptive', 'enabled'] as const, 'disabled'),
   /**
    * Only sent when thinking is not disabled. The API rejects `none` — turning
    * thinking off is `DEEPSEEK_THINKING`, not an effort level.
    */
-  DEEPSEEK_REASONING_EFFORT: z.enum(['low', 'medium', 'high', 'xhigh', 'max']).optional(),
+  DEEPSEEK_REASONING_EFFORT: optionalEnum(['low', 'medium', 'high', 'xhigh', 'max'] as const),
   /**
    * Escape hatch merged into the request body last, so it can override anything
    * above if the API changes. Empty by default: sending a field the endpoint does
@@ -125,11 +144,11 @@ const schema = z.object({
    * `server` still uses MediaRecorder to capture — that is unavoidable in a web
    * app — but MediaRecorder is near-universal, whereas Web Speech is not.
    */
-  VOICE_MODE: z.enum(['auto', 'server', 'browser']).default('auto'),
+  VOICE_MODE: enumDefault(['auto', 'server', 'browser'] as const, 'auto'),
 
   STT_API_KEY: optionalStr,
-  STT_BASE_URL: nonEmpty.default('https://api.openai.com/v1'),
-  STT_MODEL: nonEmpty.default('whisper-1'),
+  STT_BASE_URL: strDefault('https://api.openai.com/v1'),
+  STT_MODEL: strDefault('whisper-1'),
   /**
    * Vocabulary bias for the decoder. Seeding the domain words this app needs
    * measurably cuts the mishearings that matter, because a general model has no
@@ -139,24 +158,24 @@ const schema = z.object({
 
   /** Text-to-speech, OPTIONAL — used only when the browser has no Bangla voice. */
   TTS_API_KEY: optionalStr,
-  TTS_BASE_URL: nonEmpty.default('https://api.openai.com/v1'),
-  TTS_MODEL: nonEmpty.default('tts-1'),
-  TTS_VOICE: nonEmpty.default('alloy'),
+  TTS_BASE_URL: strDefault('https://api.openai.com/v1'),
+  TTS_MODEL: strDefault('tts-1'),
+  TTS_VOICE: strDefault('alloy'),
 
   GOOGLE_MAPS_API_KEY: optionalStr,
   NEXT_PUBLIC_MAPBOX_TOKEN: optionalStr,
-  NEXT_PUBLIC_MAP_PROVIDER: z.enum(['none', 'mapbox', 'google']).default('none'),
+  NEXT_PUBLIC_MAP_PROVIDER: enumDefault(['none', 'mapbox', 'google'] as const, 'none'),
 
   SMTP_HOST: optionalStr,
   SMTP_PORT: int(587),
   SMTP_USER: optionalStr,
   SMTP_PASSWORD: optionalStr,
-  SMTP_FROM: nonEmpty.default('AccessAI <no-reply@accessai.local>'),
+  SMTP_FROM: strDefault('AccessAI <no-reply@accessai.local>'),
 
   /** Web Push is optional; without both keys the app remains in-app only. */
   WEB_PUSH_PUBLIC_KEY: optionalStr,
   WEB_PUSH_PRIVATE_KEY: optionalStr,
-  WEB_PUSH_SUBJECT: nonEmpty.default('mailto:admin@accessai.local'),
+  WEB_PUSH_SUBJECT: strDefault('mailto:admin@accessai.local'),
 
   S3_BUCKET: optionalStr,
   S3_REGION: optionalStr,
@@ -164,7 +183,7 @@ const schema = z.object({
   S3_SECRET_KEY: optionalStr,
   S3_ENDPOINT: optionalStr,
 
-  NEXT_PUBLIC_APP_NAME: nonEmpty.default('AccessAI'),
+  NEXT_PUBLIC_APP_NAME: strDefault('AccessAI'),
 
   RATE_LIMIT_WINDOW_MS: int(60_000),
   RATE_LIMIT_MAX_REQUESTS: int(120),
