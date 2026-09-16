@@ -18,17 +18,23 @@
   .portal-public-header { box-shadow: 0 2px 16px rgb(var(--bds-green-950) / .035); }
   .portal-hero { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; min-height: calc(100svh - 80px); background: rgb(var(--bds-surface-default)); border-bottom: 1px solid rgb(var(--bds-border-subtle)); }
   .portal-hero-content { position: relative; z-index: 2; width: 100%; }
-  .portal-government-photo { position: absolute; inset: 0 0 0 25%; pointer-events: none; }
-  .portal-government-photo-frame { position: relative; height: 100%; overflow: hidden; }
-  .portal-government-photo-image { object-fit: cover; object-position: center 75%; transform: scale(1.15); transform-origin: center 80%; }
-  .portal-government-photo-frame::before { content: ''; position: absolute; inset: 0 25% 0 0; z-index: 1; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); mask-image: linear-gradient(to right, black 15%, transparent 100%); }
-  .portal-government-photo-frame::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, rgb(var(--bds-surface-default)) 0%, rgb(var(--bds-surface-default) / .97) 18%, rgb(var(--bds-surface-default) / .75) 35%, rgb(var(--bds-surface-default) / .25) 55%, transparent 78%); }
+  .portal-citizen-vector { position: absolute; inset: 0 0 0 48%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .portal-citizen-scene { width: 100%; max-width: 760px; height: auto; overflow: visible; }
+  .citizen-phone-float { animation: citizen-float 7s ease-in-out infinite; }
+  .citizen-card-float { animation: citizen-float 5s ease-in-out infinite; }
+  .citizen-card-delayed { animation-delay: -2.5s; }
+  .citizen-worker-sway { transform-origin: 195px 425px; animation: citizen-sway 6s ease-in-out infinite; }
+  .citizen-sparkle { animation: citizen-glow 4s ease-in-out infinite; }
+  @keyframes citizen-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes citizen-sway { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+  @keyframes citizen-glow { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
   @media (max-width: 904px) {
-    .portal-hero { padding-bottom: 300px; }
-    .portal-government-photo { inset: auto 0 0; height: 340px; }
-    .portal-government-photo-frame::before { inset: 0; mask-image: linear-gradient(to bottom, black, transparent 65%); }
-    .portal-government-photo-frame::after { background: linear-gradient(to bottom, rgb(var(--bds-surface-default)), rgb(var(--bds-surface-default) / .7) 25%, transparent 65%); }
+    .portal-hero { padding-bottom: 330px; }
+    .portal-citizen-vector { inset: auto 0 0; height: 330px; }
+    .portal-citizen-scene { width: auto; height: 100%; max-width: 100%; }
   }
+  @media (prefers-reduced-motion: reduce) { .portal-citizen-scene g { animation: none; } }
+  [data-reduce-motion='true'] .portal-citizen-scene g { animation: none; }
   .portal-hero-title { font-size: calc(clamp(2.25rem, 4.2vw, 3.5rem) * var(--bds-text-scale)); line-height: 1.16; font-weight: 700; letter-spacing: -.035em; text-wrap: balance; }
   .portal-hero-title:lang(bn) { line-height: 1.45; letter-spacing: 0; }
   .portal-eyebrow { @apply inline-flex items-center gap-2 rounded-pill border border-stroke-subtle bg-surface px-3 py-2 type-label-md text-text-brand; }
