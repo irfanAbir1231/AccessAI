@@ -28,3 +28,5 @@ coverage/
 
 # Local dev server logs
 *.log
+.vercel
+.env*
