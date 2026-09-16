@@ -75,7 +75,7 @@ export default async function SavedPage({ params }: { params: Promise<{ locale: 
         />
       )}
 
-      <Section title={tp('title')}>
+      <Section title={tp('title')} tourId="action-plans">
         {plans.length === 0 ? (
           <EmptyState title={tp('emptyTitle')} description={tp('emptyBody')} />
         ) : (

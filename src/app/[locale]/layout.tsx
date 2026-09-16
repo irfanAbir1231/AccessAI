@@ -9,6 +9,7 @@ import { QueryProvider } from '@/components/providers/QueryProvider';
 import { PreferencesProvider } from '@/components/providers/PreferencesProvider';
 import { ToastProvider } from '@/components/providers/ToastProvider';
 import { getFullSession } from '@/lib/http/session';
+import { AppTourProvider } from '@/components/tour/AppTour';
 import '../globals.css';
 
 /**
@@ -77,6 +78,7 @@ export async function generateMetadata({
     },
     description: landing('heroBody'),
     applicationName: t('appName'),
+    icons: { icon: '/accessai-logo.svg', shortcut: '/accessai-logo.svg' },
     formatDetection: { telephone: true, address: false, email: false },
     alternates: {
       languages: {
@@ -138,7 +140,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <QueryProvider>
             <PreferencesProvider {...(initialPreferences ? { initial: initialPreferences } : {})}>
-              <ToastProvider>{children}</ToastProvider>
+              <ToastProvider><AppTourProvider>{children}</AppTourProvider></ToastProvider>
             </PreferencesProvider>
           </QueryProvider>
         </NextIntlClientProvider>

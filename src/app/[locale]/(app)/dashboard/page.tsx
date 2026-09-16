@@ -129,10 +129,14 @@ export default async function DashboardPage({
   ];
 
   return (
-    <div className="flex flex-col gap-8">
-      <header>
+    <div className="portal-dashboard flex flex-col gap-8">
+      <header className="portal-dashboard-welcome flex flex-wrap items-center justify-between gap-5 rounded-lg border border-stroke-subtle bg-surface p-6">
+        <div>
         <p className="type-body-md text-text-secondary">{greeting}</p>
         <h1 className="type-heading-lg mt-1 text-text-primary">{session.user.name}</h1>
+        <p className="type-body-md mt-2 text-text-secondary">{bn ? 'আপনার সুযোগ, প্রস্তুতি ও পরবর্তী পদক্ষেপ—এক জায়গায়।' : 'Your opportunities, progress and next steps—all in one place.'}</p>
+        </div>
+        <Link href="/chat" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-ramp-green-600 px-5 type-label-lg text-white hover:bg-ramp-green-700"><MessageCircle size={22} aria-hidden="true" />{t('startChat')}<ArrowRight size={20} aria-hidden="true" /></Link>
       </header>
 
       {!ai.isLive ? <AiEngineNotice mode={ai.mode} /> : null}
@@ -208,7 +212,7 @@ export default async function DashboardPage({
 
       {/* ------------------------------------------ urgent / time-sensitive */}
       {hasUrgency ? (
-        <div className="flex flex-col gap-6">
+        <div className="grid gap-6 xl:grid-cols-2">
           {todayTasks.length > 0 ? (
             <Section title={t('urgentTitle')} action={<Link href="/timeline" className="type-label-lg text-text-link underline">{tc('viewAll')}</Link>}>
               <ul className="flex flex-col gap-2">

@@ -175,9 +175,9 @@ export default async function OpportunityDetailPage({
   ]);
 
   return (
-    <article className="flex flex-col gap-8 pb-8">
+    <article className="portal-programme-detail flex flex-col gap-8 pb-8">
       {/* ------------------------------------------------------- header */}
-      <header className="flex flex-col gap-4">
+      <header className="flex flex-col gap-4 rounded-lg border border-stroke-subtle bg-surface p-6">
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone="brand">{o.category.replace(/_/g, ' ')}</Badge>
           <VerificationBadge status={o.verificationStatus} label={verificationLabel} />
@@ -262,7 +262,7 @@ export default async function OpportunityDetailPage({
       {/* Anchor for the "আমি কি পাব" voice command, which scrolls here rather
           than navigating — the trace is already on this page. */}
       <div id="eligibility" />
-      <Section title={t('detailEligibility')}>
+      <Section title={t('detailEligibility')} tourId="eligibility">
         <Card padding="default" className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <EligibilityPill
@@ -439,7 +439,7 @@ export default async function OpportunityDetailPage({
       </Section>
 
       {/* ---------------------------------------------------- documents */}
-      <Section title={t('detailDocuments')}>
+      <Section title={t('detailDocuments')} tourId="documents">
         {item.documents.length === 0 ? (
           <Card padding="default">
             <p className="type-body-lg text-text-secondary">{tc('unknown')}</p>
@@ -569,7 +569,7 @@ export default async function OpportunityDetailPage({
       </Section>
 
       {/* ----------------------------------------------------- sources */}
-      <Section title={t('detailSources')}>
+      <Section title={t('detailSources')} tourId="sources">
         {sourceDocs.length === 0 && !o.sourceUrl ? (
           <Card padding="default">
             <p className="type-body-lg text-text-secondary">{tc('unknown')}</p>

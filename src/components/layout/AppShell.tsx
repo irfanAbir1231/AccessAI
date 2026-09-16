@@ -9,6 +9,8 @@ import {
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils/cn';
 import { LocaleSwitcher } from './LocaleSwitcher';
+import { BrandLogo } from './BrandLogo';
+import { TourLaunchButton } from '@/components/tour/AppTour';
 import { VoiceButton } from '@/components/voice/VoiceButton';
 import { VoiceSheet } from '@/components/voice/VoiceSheet';
 import { useVoice, useVoiceActions } from '@/components/providers/VoiceProvider';
@@ -116,7 +118,7 @@ export function AppShell({
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="portal-app min-h-screen bg-canvas">
       {/* Keyboard users must be able to bypass the navigation. */}
       <a
         href="#main"
@@ -127,14 +129,14 @@ export function AppShell({
 
       {/* ---------- desktop sidebar ---------- */}
       <aside
-        className="fixed inset-y-0 start-0 z-appbar hidden w-64 flex-col border-e border-stroke-subtle bg-surface lg:flex"
+        className="portal-sidebar fixed inset-y-0 start-0 z-appbar hidden w-64 flex-col border-e border-stroke-subtle bg-surface xl:flex"
         aria-label={t('mainNavigation')}
       >
-        <div className="flex h-appbar items-center gap-3 border-b border-stroke-subtle px-5">
+        <div className="flex min-h-20 items-center gap-3 border-b border-stroke-subtle px-5">
           <BrandMark />
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-3">
+        <nav className="flex-1 overflow-y-auto p-4">
           <ul className="flex flex-col gap-1">
             {PRIMARY_NAV.map((item) => (
               <SidebarLink key={item.href} item={item} active={isActive(item.href)} label={t(item.labelKey)} />
@@ -167,7 +169,8 @@ export function AppShell({
           {/* Voice sits with navigation, not hidden in settings: it IS a way to
               navigate, and burying it makes it undiscoverable for the people who
               need it most. */}
-          <VoiceButton className="mb-2 w-full" />
+          <TourLaunchButton className="mb-2 w-full" />
+          <div data-tour="voice-launch"><VoiceButton className="mb-2 w-full" /></div>
           <button
             type="button"
             onClick={voice.showHelp}
@@ -193,7 +196,7 @@ export function AppShell({
       </aside>
 
       {/* ---------- mobile app bar ---------- */}
-      <header className="sticky top-0 z-appbar flex h-appbar items-center justify-between gap-3 border-b border-stroke-subtle bg-surface px-4 pt-safe lg:hidden">
+      <header className="sticky top-0 z-appbar flex min-h-18 items-center justify-between gap-3 border-b border-stroke-subtle bg-surface px-4 pt-safe xl:hidden">
         {title ? (
           <h1 className="type-heading-sm min-w-0 flex-1 truncate text-text-primary">{title}</h1>
         ) : (
@@ -219,12 +222,23 @@ export function AppShell({
         </div>
       </header>
 
+      <header className="portal-workspace-header hidden min-h-20 items-center justify-between gap-4 border-b border-stroke-subtle bg-surface px-8 xl:ms-64 xl:flex">
+        <div><p className="type-caption text-text-secondary">{tc('appName')} · {tc('tagline')}</p><p className="type-label-lg mt-1 text-text-primary">{t(pathname.startsWith('/admin') ? 'admin' : [...PRIMARY_NAV, ...SECONDARY_NAV].find((item) => isActive(item.href))?.labelKey ?? 'home')}</p></div>
+        <div className="flex items-center gap-3"><Link href="/notifications" className="portal-header-action" aria-label={`${t('notifications')} (${unreadCount})`}><Bell size={20} aria-hidden="true" />{unreadCount > 0 ? <span className="type-caption">{unreadCount}</span> : null}</Link><Link href="/profile" className="flex min-h-12 items-center gap-2 rounded-md px-2 hover:bg-surface-brand-subtle"><span className="portal-icon" aria-hidden="true">{userName.trim().charAt(0)}</span><span className="type-label-md max-w-[160px] truncate">{userName}</span></Link></div>
+      </header>
+
+      <nav aria-label={t('mainNavigation')} className="portal-mobile-tools flex gap-2 overflow-x-auto border-b border-stroke-subtle bg-surface px-4 py-2 xl:hidden">
+        <TourLaunchButton className="shrink-0" />
+        {SECONDARY_NAV.map((item) => <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined} className={cn('inline-flex min-h-12 shrink-0 items-center gap-2 rounded-md px-3 type-label-md', isActive(item.href) ? 'bg-surface-brand-subtle text-text-brand' : 'text-text-secondary hover:bg-surface-sunken')}><item.icon size={18} aria-hidden="true" />{t(item.labelKey)}</Link>)}
+        {isStaff ? <Link href="/admin" className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-md px-3 type-label-md text-text-brand"><Shield size={18} aria-hidden="true" />{t('admin')}</Link> : null}
+      </nav>
+
       {/* ---------- main ---------- */}
       <main
         id="main"
         className={cn(
-          'mx-auto w-full max-w-content px-4 py-5 lg:ps-72 lg:pe-8 md:px-5',
-          hideBottomNav ? 'pb-4' : 'pb-24 lg:pb-8',
+          'portal-main w-full px-4 py-6 md:px-5 xl:ps-72 xl:pe-8',
+          hideBottomNav ? 'pb-4' : 'pb-24 xl:pb-8',
         )}
       >
         {children}
@@ -239,8 +253,9 @@ export function AppShell({
        * and the safe-area inset so a thumb cannot hit both at once.
        */}
       <div
+        data-tour="voice-launch"
         className={cn(
-          'fixed inset-x-0 z-appbar flex justify-center px-4 lg:hidden',
+          'fixed inset-x-0 z-appbar flex justify-center px-4 xl:hidden',
           hideBottomNav ? 'bottom-4 pb-safe' : 'bottom-bottomnav mb-3 pb-safe',
         )}
       >
@@ -254,7 +269,7 @@ export function AppShell({
       {hideBottomNav ? null : (
         <nav
           aria-label={t('mainNavigation')}
-          className="fixed inset-x-0 bottom-0 z-appbar border-t border-stroke-subtle bg-surface pb-safe lg:hidden"
+          className="portal-bottom-nav fixed inset-x-0 bottom-0 z-appbar border-t border-stroke-subtle bg-surface pb-safe xl:hidden"
         >
           <ul className="flex h-bottomnav items-stretch">
             {PRIMARY_NAV.map((item) => {
@@ -302,14 +317,9 @@ export function AppShell({
 function BrandMark() {
   const t = useTranslations('common');
   return (
-    <Link href="/dashboard" className="flex items-center gap-2 rounded-md focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2">
-      <span
-        aria-hidden="true"
-        className="flex h-9 w-9 items-center justify-center rounded-md bg-ramp-green-600 type-label-lg text-white"
-      >
-        অ
-      </span>
-      <span className="type-heading-sm text-text-primary">{t('appName')}</span>
+    <Link href="/dashboard" className="flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2">
+      <BrandLogo size={36} />
+      <span className="type-heading-sm min-w-0 truncate text-text-primary">{t('appName')}</span>
     </Link>
   );
 }
@@ -332,7 +342,7 @@ function SidebarLink({
         href={item.href}
         aria-current={active ? 'page' : undefined}
         className={cn(
-          'flex min-h-12 items-center gap-3 rounded-md px-3 type-label-lg',
+          'portal-sidebar-link flex min-h-12 items-center gap-3 rounded-md px-3 type-label-lg',
           'transition-colors duration-fast ease-standard',
           'focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2',
           active

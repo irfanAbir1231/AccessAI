@@ -2,6 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .tour-floating-launch { position: fixed; right: 24px; bottom: 24px; z-index: 45; }
+  .tour-spotlight { position: fixed; z-index: 60; pointer-events: none; border: 2px solid rgb(var(--bds-border-brand)); border-radius: 18px; box-shadow: 0 0 0 9999px rgb(4 36 27 / .48); transition: top 160ms, left 160ms, width 160ms, height 160ms; }
+  .tour-soft-scrim { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: rgb(4 36 27 / .32); }
+  .tour-panel { position: fixed; right: 24px; bottom: 24px; z-index: 70; width: 400px; max-width: calc(100vw - 32px); max-height: calc(100svh - 32px); overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 20px; border: 1px solid rgb(var(--bds-border-subtle)); border-radius: 20px; background: rgb(var(--bds-surface-default)); box-shadow: 0 12px 48px rgb(4 36 27 / .2); }
+  .tour-icon-button { @apply inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md text-text-secondary hover:bg-surface-sunken disabled:opacity-40; }
+  .tour-resume-bar { position: fixed; display: flex; align-items: center; right: 16px; bottom: 20px; z-index: 70; max-width: calc(100vw - 32px); border: 1px solid rgb(var(--bds-border-brand)); border-radius: 14px; background: rgb(var(--bds-surface-default)); box-shadow: 0 4px 24px rgb(4 36 27 / .12); }
+  @media (max-width: 904px) { .tour-panel { right: 12px; bottom: 12px; max-width: calc(100vw - 24px); max-height: 55svh; padding: 16px; gap: 10px; } .tour-resume-bar { bottom: 148px; } }
+}
+
+/* Citizen portal presentation uses the existing Bhorosha palette in every theme. */
+@layer components {
+  .portal-nav-link { @apply inline-flex min-h-12 items-center type-label-md text-text-secondary transition-colors hover:text-text-brand; }
+  .portal-public-header { box-shadow: 0 2px 16px rgb(var(--bds-green-950) / .035); }
+  .portal-hero { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; min-height: calc(100svh - 80px); background: rgb(var(--bds-surface-default)); border-bottom: 1px solid rgb(var(--bds-border-subtle)); }
+  .portal-hero-content { position: relative; z-index: 2; width: 100%; }
+  .portal-government-photo { position: absolute; inset: 0 0 0 25%; pointer-events: none; }
+  .portal-government-photo-frame { position: relative; height: 100%; overflow: hidden; }
+  .portal-government-photo-image { object-fit: cover; object-position: center 75%; transform: scale(1.15); transform-origin: center 80%; }
+  .portal-government-photo-frame::before { content: ''; position: absolute; inset: 0 25% 0 0; z-index: 1; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); mask-image: linear-gradient(to right, black 15%, transparent 100%); }
+  .portal-government-photo-frame::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, rgb(var(--bds-surface-default)) 0%, rgb(var(--bds-surface-default) / .97) 18%, rgb(var(--bds-surface-default) / .75) 35%, rgb(var(--bds-surface-default) / .25) 55%, transparent 78%); }
+  @media (max-width: 904px) {
+    .portal-hero { padding-bottom: 300px; }
+    .portal-government-photo { inset: auto 0 0; height: 340px; }
+    .portal-government-photo-frame::before { inset: 0; mask-image: linear-gradient(to bottom, black, transparent 65%); }
+    .portal-government-photo-frame::after { background: linear-gradient(to bottom, rgb(var(--bds-surface-default)), rgb(var(--bds-surface-default) / .7) 25%, transparent 65%); }
+  }
+  .portal-hero-title { font-size: calc(clamp(2.25rem, 4.2vw, 3.5rem) * var(--bds-text-scale)); line-height: 1.16; font-weight: 700; letter-spacing: -.035em; text-wrap: balance; }
+  .portal-hero-title:lang(bn) { line-height: 1.45; letter-spacing: 0; }
+  .portal-eyebrow { @apply inline-flex items-center gap-2 rounded-pill border border-stroke-subtle bg-surface px-3 py-2 type-label-md text-text-brand; }
+  .portal-kicker { @apply mb-2 type-label-md text-text-brand; }
+  .portal-icon { @apply inline-flex h-12 w-12 items-center justify-center rounded-md bg-surface-brand-subtle text-text-brand; }
+  .portal-visual { position: relative; min-height: 380px; overflow: hidden; border-radius: 24px; background: radial-gradient(ellipse at center, rgb(var(--bds-green-200) / .35), transparent 68%); }
+  .portal-visual-orbit { position: absolute; inset: 32px 40px; border: 1px solid rgb(var(--bds-green-600) / .15); border-radius: 50%; }
+  .portal-visual-orbit::after { content: ''; position: absolute; inset: 25px; border: 1px dashed rgb(var(--bds-green-600) / .15); border-radius: inherit; }
+  .portal-visual-building { position: absolute; inset: 48px 16px 30px; display: flex; align-items: center; color: rgb(var(--bds-text-brand)); }
+  .portal-floating-card { @apply flex items-center gap-3 rounded-lg border border-stroke-subtle bg-surface p-4 text-text-primary; position: absolute; box-shadow: 0 8px 28px rgb(var(--bds-green-950) / .08); max-width: calc(100% - 32px); }
+  .portal-floating-top { top: 22px; left: 16px; }
+  .portal-floating-bottom { bottom: 42px; right: 16px; }
+  .portal-visual-caption { @apply type-caption text-text-brand; position: absolute; bottom: 8px; inset-inline: 0; display: flex; justify-content: center; align-items: center; gap: 8px; }
+  .portal-service-card { height: 100%; transition: border-color 180ms, box-shadow 180ms, transform 180ms; }
+  .portal-service-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgb(var(--bds-green-950) / .06); }
+  .portal-process { border-block: 1px solid rgb(var(--bds-border-subtle)); }
+  .portal-step { position: relative; }
+  .portal-card { box-shadow: 0 2px 8px rgb(var(--bds-green-950) / .035); }
+  .portal-section-heading { padding-bottom: 4px; }
+  .portal-section-heading h2 { font-weight: 650; }
+  .portal-sidebar { box-shadow: 2px 0 12px rgb(var(--bds-green-950) / .025); }
+  .portal-sidebar-link { margin-block: 3px; }
+  .portal-sidebar-link[aria-current='page'] { box-shadow: inset 3px 0 0 rgb(var(--bds-border-brand)); font-weight: 650; }
+  .portal-main > * { max-width: 1200px; margin-inline: auto; }
+  .portal-main > div > header:first-child:not(.portal-dashboard-welcome) { padding: 24px; border: 1px solid rgb(var(--bds-border-subtle)); border-radius: 16px; background: rgb(var(--bds-surface-default)); }
+  .portal-header-action { @apply inline-flex min-h-12 min-w-12 items-center justify-center gap-1 rounded-md border border-stroke-subtle text-text-brand hover:bg-surface-brand-subtle; }
+  .portal-dashboard-welcome { background: linear-gradient(120deg, rgb(var(--bds-surface-default)), rgb(var(--bds-surface-brand-subtle))); }
+  .portal-opportunity-card { border-top: 3px solid rgb(var(--bds-green-600)); }
+  .portal-opportunity-card > div:last-child { margin-top: auto; }
+  .portal-opportunity-browser > form { padding: 20px; border: 1px solid rgb(var(--bds-border-subtle)); border-radius: 16px; background: rgb(var(--bds-surface-default)); }
+  .portal-chat { max-width: 900px; }
+  .portal-chat-composer { box-shadow: 0 -4px 24px rgb(var(--bds-green-950) / .05); }
+  .portal-auth { background-image: radial-gradient(ellipse at 50% 25%, rgb(var(--bds-surface-brand-subtle)), transparent 65%); }
+  .portal-auth main > * { border: 1px solid rgb(var(--bds-border-subtle)); border-radius: 24px; padding: 28px; background: rgb(var(--bds-surface-default)); box-shadow: 0 8px 32px rgb(var(--bds-green-950) / .045); }
+  .portal-bottom-nav { box-shadow: 0 -2px 16px rgb(var(--bds-green-950) / .05); }
+  .portal-landing section[id], #citizen-support { scroll-margin-top: 100px; }
+  @media (max-width: 904px) { .portal-visual { min-height: 300px; max-width: 540px; width: 100%; margin-inline: auto; } .portal-main { padding-bottom: 160px; } .portal-chat-composer { bottom: 132px; } }
+  @media (max-width: 413px) { .portal-hero-title { font-size: calc(2rem * var(--bds-text-scale)); } .portal-auth main > * { padding: 20px; border-radius: 16px; } .portal-floating-card { padding: 12px; gap: 8px; } .portal-floating-card .portal-icon { width: 36px; height: 36px; flex-shrink: 0; } .portal-visual { min-height: 280px; } }
+}
+
 /* ==========================================================================
    Bhorosha Design System (BDS) v1.0 — token layer
    --------------------------------------------------------------------------
@@ -646,5 +713,17 @@
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@layer components {
+  [data-theme='dark'] .portal-visual { background: radial-gradient(ellipse at center, rgb(var(--bds-green-800) / .5), transparent 68%); }
+  [data-theme='sunlight'] .portal-hero, [data-theme='sunlight'] .portal-dashboard-welcome { background: rgb(var(--bds-surface-default)); }
+  .portal-chat-composer textarea { min-width: 0; }
+  @media (max-width: 599px) {
+    .portal-chat-composer form { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .portal-chat-composer textarea { grid-column: 1 / -1; width: 100%; min-height: 80px; }
+    .portal-chat-composer button { justify-self: end; }
+    .portal-chat-composer button[type='submit'] { grid-column: 2; }
   }
 }

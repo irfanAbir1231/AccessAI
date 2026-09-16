@@ -133,14 +133,14 @@ export function NearbyBrowser({
   const types = [...new Set(items.map((i) => i.type))];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="portal-nearby flex flex-col gap-5">
       {mapProvider === 'none' ? (
         <Banner tone="info" statusWord={tc('appName')}>
           {t('mapUnavailable')}
         </Banner>
       ) : null}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+      <div className="flex flex-col gap-3 rounded-lg border border-stroke-subtle bg-surface p-5 lg:flex-row lg:items-end">
         <Select
           label={t('title')}
           value={activeDistrict}
@@ -205,12 +205,12 @@ export function NearbyBrowser({
       ) : items.length === 0 ? (
         <EmptyState icon={<MapPin size={64} className="icon" strokeWidth={1.5} />} title={t('emptyTitle')} />
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
           {items.map((location) => {
             const Icon = TYPE_ICONS[location.type] ?? Building2;
             return (
               <li key={location.id}>
-                <Card padding="default" className="flex flex-col gap-3">
+                <Card padding="default" className="flex h-full flex-col gap-4">
                   <div className="flex items-start gap-3">
                     <span aria-hidden="true" className="mt-0.5 shrink-0 text-ramp-green-600">
                       <Icon size={24} className="icon" />

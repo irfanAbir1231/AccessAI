@@ -101,7 +101,7 @@ export function OpportunityListClient({
   };
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="portal-opportunity-grid grid grid-cols-1 gap-4 2xl:grid-cols-2">
       {items.map((item) => (
         <li key={item.id}>
           <OpportunityCard

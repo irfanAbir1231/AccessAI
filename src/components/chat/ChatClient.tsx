@@ -23,6 +23,8 @@ import { useVoice, useVoiceReadable, useVoiceActions } from '@/components/provid
 import { SpeakButton } from '@/components/voice/SpeakButton';
 import { formatTimeAgo } from '@/lib/format/dates';
 import type { AiEngine } from '@/lib/domain/enums';
+import { TourChatExample } from '@/components/tour/TourChatExample';
+import { useAppTour } from '@/components/tour/AppTour';
 
 /**
  * Chat — PRD §61, the primary interaction surface.
@@ -117,6 +119,7 @@ export function ChatClient({
   const queryClient = useQueryClient();
 
   const voice = useVoice();
+  const showingTourExample = Boolean(useAppTour()?.progress?.sampleChat);
 
   const [messages, setMessages] = useState<ChatMessage[]>([...initialMessages]);
   const [conversationId, setConversationId] = useState(initialConversationId);
@@ -265,7 +268,7 @@ export function ChatClient({
   ];
 
   return (
-    <div className="flex min-h-[calc(100vh-8rem)] flex-col">
+    <div className="portal-chat flex min-h-[calc(100vh-8rem)] flex-col">
       <div className="flex items-center justify-between gap-3">
         <h1 className="type-heading-lg text-text-primary">{t('title')}</h1>
         <Button
@@ -282,8 +285,9 @@ export function ChatClient({
       <AiEngineNotice mode={aiMode} degraded={degraded} className="mt-4" />
 
       {/* ----------------------------------------------------- transcript */}
-      <div className="mt-5 flex flex-1 flex-col gap-4" role="log" aria-live="polite" aria-label={t('title')}>
-        {messages.length === 0 ? (
+      <div data-tour="chat-log" className="mt-5 flex flex-1 flex-col gap-4" role="log" aria-live="polite" aria-label={t('title')}>
+        <TourChatExample />
+        {messages.length === 0 && !showingTourExample ? (
           <Card padding="hero" className="flex flex-col gap-4">
             <Sparkles size={32} className="icon text-ramp-green-600" aria-hidden="true" />
             <p className="type-body-lg text-text-primary measure">
@@ -336,7 +340,7 @@ export function ChatClient({
       </div>
 
       {/* --------------------------------------------------- suggestions */}
-      {messages.length === 0 ? (
+      {messages.length === 0 && !showingTourExample ? (
         <div className="mt-5">
           <p className="type-label-md mb-2 text-text-secondary">{t('suggestedTitle')}</p>
           <ul className="flex flex-col gap-2">
@@ -356,7 +360,7 @@ export function ChatClient({
       ) : null}
 
       {/* ------------------------------------------------------ composer */}
-      <div className="sticky bottom-0 -mx-4 mt-5 border-t border-stroke-subtle bg-surface px-4 py-3 pb-safe md:-mx-5 md:px-5">
+      <div className="portal-chat-composer sticky bottom-0 mt-5 rounded-lg border border-stroke-subtle bg-surface px-4 py-3 pb-safe">
         <form
           onSubmit={(e) => {
             e.preventDefault();

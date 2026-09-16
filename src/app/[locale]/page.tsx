@@ -10,10 +10,11 @@ import { countByCategory } from '@/modules/opportunities/opportunity.service';
 import { Link } from '@/i18n/navigation';
 import { LocaleSwitcher } from '@/components/layout/LocaleSwitcher';
 import { Card, Section } from '@/components/primitives/Card';
-import { Banner } from '@/components/primitives/Banner';
 import { Num } from '@/components/primitives/Money';
 import { getSession } from '@/lib/http/session';
 import type { AppLocale } from '@/i18n/routing';
+import { CitizenPortalVisual } from '@/components/layout/CitizenPortalVisual';
+import { BrandLogo } from '@/components/layout/BrandLogo';
 
 /**
  * Landing page — PRD §58.
@@ -78,24 +79,25 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
   const totalProgrammes = Object.values(categoryCounts).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="portal-landing min-h-screen bg-canvas">
       {/* ---------------------------------------------------------- header */}
-      <header className="sticky top-0 z-appbar border-b border-stroke-subtle bg-surface/95 backdrop-blur">
-        <div className="mx-auto flex h-appbar max-w-content items-center justify-between gap-3 px-4 md:px-5">
-          <span className="flex items-center gap-2">
-            <span
-              aria-hidden="true"
-              className="flex h-9 w-9 items-center justify-center rounded-md bg-ramp-green-600 type-label-lg text-white"
-            >
-              অ
-            </span>
-            <span className="type-heading-sm text-text-primary">{tc('appName')}</span>
+      <header className="portal-public-header sticky top-0 z-appbar border-b border-stroke-subtle bg-surface/95 backdrop-blur">
+        <div className="mx-auto flex min-h-20 max-w-content items-center justify-between gap-3 px-4 md:px-5">
+          <span className="flex min-w-0 items-center gap-2">
+            <BrandLogo />
+            <span className="type-heading-sm min-w-0 truncate text-text-primary">{tc('appName')}</span>
           </span>
-          <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-6 xl:flex" aria-label={bn ? 'প্রধান নেভিগেশন' : 'Main navigation'}>
+            <a href="#life-events" className="portal-nav-link">{bn ? 'জীবনের পরিবর্তন' : 'Life events'}</a>
+            <Link href="/opportunities" className="portal-nav-link">{t('browseProgrammes')}</Link>
+            <a href="#how-it-works" className="portal-nav-link">{t('howItWorks')}</a>
+            <a href="#citizen-support" className="portal-nav-link">{bn ? 'সহায়তা' : 'Support'}</a>
+          </nav>
+          <div className="flex shrink-0 items-center gap-2">
             <LocaleSwitcher compact />
             <Link
               href={session ? '/dashboard' : '/login'}
-              className="inline-flex min-h-12 items-center rounded-md px-4 type-label-lg text-text-brand hover:bg-surface-brand-subtle focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
+              className="inline-flex min-h-12 items-center rounded-md bg-ramp-green-600 px-4 type-label-lg text-white hover:bg-ramp-green-700 focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
             >
               {session ? tc('viewAll') : tc('signIn')}
             </Link>
@@ -105,30 +107,31 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
 
       <main id="main">
         {/* ------------------------------------------------------- hero */}
-        <section className="bg-surface-brand px-4 py-12 md:px-5 lg:py-16">
-          <div className="mx-auto max-w-content">
+        <section className="portal-hero px-4 py-10 md:px-5 xl:py-16">
+          <CitizenPortalVisual bn={bn} />
+          <div className="portal-hero-content mx-auto grid max-w-content items-center gap-8 xl:grid-cols-2">
             <div className="max-w-text">
-              <p className="type-label-md text-ramp-green-300">{tc('tagline')}</p>
-              <h1 className="type-display-sm mt-3 text-white lg:type-display-lg">{t('heroTitle')}</h1>
-              <p className="type-body-lg mt-4 text-ramp-green-100">{t('heroBody')}</p>
+              <p className="portal-eyebrow"><span className="h-2 w-2 rounded-pill bg-ramp-green-600" />{tc('tagline')}</p>
+              <h1 className="portal-hero-title mt-5 text-text-primary">{t('heroTitle')}</h1>
+              <p className="type-body-lg mt-5 max-w-form text-text-secondary">{t('heroBody')}</p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={session ? '/chat' : '/register'}
-                  className="inline-flex min-h-16 items-center justify-center gap-2 rounded-md bg-white px-6 type-label-lg text-text-brand hover:bg-ramp-green-50 active:bg-ramp-green-100 focus-visible:outline-3 focus-visible:outline-white focus-visible:outline-offset-2"
+                  className="inline-flex min-h-14 items-center justify-center gap-2 rounded-md bg-ramp-green-600 px-6 type-label-lg text-white shadow-elev-2 hover:bg-ramp-green-700 focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
                 >
                   {t('startConversation')}
                   <ArrowRight size={24} className="icon" aria-hidden="true" />
                 </Link>
                 <Link
                   href="/opportunities"
-                  className="inline-flex min-h-16 items-center justify-center rounded-md border-1.5 border-ramp-green-300 px-6 type-label-lg text-ramp-green-300 hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-white focus-visible:outline-offset-2"
+                  className="inline-flex min-h-14 items-center justify-center rounded-md border-1.5 border-stroke bg-surface px-6 type-label-lg text-text-brand hover:bg-surface-brand-subtle focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
                 >
                   {t('browseProgrammes')}
                 </Link>
               </div>
 
-              <p className="type-body-md mt-6 text-ramp-green-200">
+              <p className="type-body-md mt-6 text-text-secondary">
                 <Num value={totalProgrammes} />{' '}
                 {bn ? 'কর্মসূচি, ৬৪ জেলা, ২ ভাষা।' : 'programmes · 64 districts · 2 languages.'}
               </p>
@@ -136,25 +139,20 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
           </div>
         </section>
 
-        {/* Honest, prominent, and above the fold on mobile. */}
-        <div className="mx-auto max-w-content px-4 pt-5 md:px-5">
-          <Banner tone="warning" statusWord={bn ? 'মনে রাখবেন' : 'Please note'}>
-            {t('demoNotice')}
-          </Banner>
-        </div>
-
         {/* ------------------------------------------------ life events */}
-        <section className="mx-auto max-w-content px-4 py-10 md:px-5">
+        <section id="life-events" className="portal-service-section mx-auto max-w-content px-4 py-10 md:px-5">
+          <p className="portal-kicker">{bn ? 'সঠিক সহায়তা খুঁজে নিন' : 'Find the support you need'}</p>
           <h2 className="type-heading-lg text-text-primary">{t('lifeEventsTitle')}</h2>
           <p className="type-body-lg mt-2 text-text-secondary measure">{t('lifeEventsBody')}</p>
 
-          <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
             {events.map((event) => (
               <li key={event.code}>
                 <Link
                   href={{ pathname: '/opportunities', query: { lifeEvent: event.code } }}
-                  className="group flex min-h-20 items-start gap-3 rounded-lg border border-stroke-subtle bg-surface p-4 shadow-elev-1 transition-colors duration-fast hover:border-stroke-brand hover:bg-surface-brand-subtle focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
+                  className="portal-service-card group flex min-h-20 items-start gap-3 rounded-lg border border-stroke-subtle bg-surface p-5 shadow-elev-1 transition-colors duration-fast hover:border-stroke-brand hover:bg-surface-brand-subtle focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
                 >
+                  <span className="portal-icon shrink-0" aria-hidden="true"><HandHeart size={23} /></span>
                   <span className="min-w-0 flex-1">
                     <span className="type-body-lg block text-text-primary">
                       {bn ? event.labelBn : event.label}
@@ -175,12 +173,12 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         </section>
 
         {/* ------------------------------------------------ how it works */}
-        <section className="bg-surface px-4 py-10 md:px-5">
+        <section id="how-it-works" className="portal-process bg-surface px-4 py-10 md:px-5">
           <div className="mx-auto max-w-content">
             <h2 className="type-heading-lg text-text-primary">{t('howItWorks')}</h2>
-            <ol className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <ol className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-4">
               {[1, 2, 3, 4].map((step) => (
-                <li key={step} className="flex flex-col gap-3">
+                <li key={step} className="portal-step flex flex-col gap-3 rounded-lg border border-stroke-subtle bg-canvas p-5">
                   {/* Numbered circles, not abstract dots — BDS §9.5 maps this
                       onto the USSD menu model citizens already have. */}
                   <span
@@ -200,10 +198,10 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         {/* -------------------------------------------------- categories */}
         <Section
           title={t('categoriesTitle')}
-          className="mx-auto max-w-content px-4 py-10 md:px-5"
+          className="portal-categories mx-auto max-w-content px-4 py-10 md:px-5"
           headingLevel="h2"
         >
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
             {Object.entries(categoryCounts)
               .sort((a, b) => b[1] - a[1])
               .map(([category, n]) => {
@@ -213,7 +211,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
                   <li key={category}>
                     <Link
                       href={{ pathname: '/opportunities', query: { category } }}
-                      className="flex min-h-16 items-center gap-3 rounded-lg border border-stroke-subtle bg-surface p-4 shadow-elev-1 transition-colors duration-fast hover:border-stroke-brand focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
+                      className="portal-service-card flex min-h-20 items-center gap-3 rounded-lg border border-stroke-subtle bg-surface p-5 shadow-elev-1 transition-colors duration-fast hover:border-stroke-brand focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
                     >
                       <span aria-hidden="true" className="shrink-0 text-ramp-green-600">
                         <Icon size={28} className="icon" />
@@ -248,7 +246,7 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
 
         {/* --------------------------------------------------------- FAQ */}
         <Section title={t('faqTitle')} className="mx-auto max-w-content px-4 py-10 md:px-5" headingLevel="h2">
-          <div className="flex max-w-text flex-col gap-3">
+          <div id="citizen-support" className="grid gap-3 xl:grid-cols-2">
             {[1, 2, 3, 4].map((n) => (
               <Card key={n} padding="default">
                 <details className="group">
@@ -285,20 +283,24 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
       </main>
 
       {/* ------------------------------------------------------- footer */}
-      <footer className="border-t border-stroke-subtle bg-surface px-4 py-8 md:px-5">
+      <footer className="portal-footer border-t border-stroke-subtle bg-surface-brand px-4 py-8 md:px-5">
         <div className="mx-auto flex max-w-content flex-col gap-5">
+          <details className="type-caption text-ramp-green-100">
+            <summary className="inline-flex min-h-12 cursor-pointer items-center">{bn ? 'ছবির ক্রেডিট' : 'Photo credits'}</summary>
+            <p><a href="https://commons.wikimedia.org/wiki/File:National_Parliament_of_Bangladesh_17.jpg" className="underline">Asivechowdhury / Wikimedia Commons</a>{' · '}<a href="https://creativecommons.org/licenses/by-sa/4.0/" className="underline">CC BY-SA 4.0</a>{' · '}{bn ? 'ক্রপ, ব্লার ও ফেড করা হয়েছে' : 'Cropped with blur and fade for display'}</p>
+          </details>
+          <div className="flex items-center gap-3 text-white"><BrandLogo size={48} /><div><p className="type-heading-sm">{tc('appName')}</p><p className="type-body-md text-ramp-green-100">{tc('tagline')}</p></div></div>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
             {(['footerAbout', 'footerContact', 'footerPrivacy', 'footerTerms', 'footerSupport'] as const).map((key) => (
               <Link
                 key={key}
                 href="/about"
-                className="type-body-md inline-flex min-h-12 items-center text-text-link underline focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
+                className="type-body-md inline-flex min-h-12 items-center text-ramp-green-100 underline focus-visible:outline-3 focus-visible:outline-white focus-visible:outline-offset-2"
               >
                 {t(key)}
               </Link>
             ))}
           </nav>
-          <p className="type-caption text-text-tertiary measure">{t('demoNotice')}</p>
         </div>
       </footer>
     </div>

@@ -93,7 +93,7 @@ export function OpportunityCard({
         : item.eligibility.topReason;
 
   return (
-    <Card padding={compact ? 'compact' : 'default'} className="flex flex-col gap-3">
+    <Card padding={compact ? 'compact' : 'default'} className="portal-opportunity-card flex h-full flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <h3 className="type-heading-sm min-w-0 flex-1 text-text-primary">
           <Link
@@ -135,7 +135,7 @@ export function OpportunityCard({
         </p>
       ) : null}
 
-      <dl className="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <dl className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-md border border-stroke-subtle bg-canvas p-3">
         {item.benefitAmount !== null ? (
           <div>
             <dt className="type-caption text-text-secondary">{tc('amount')}</dt>

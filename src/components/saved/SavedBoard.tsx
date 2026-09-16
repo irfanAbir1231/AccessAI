@@ -122,7 +122,7 @@ export function SavedBoard({
   ];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="portal-saved-board flex flex-col gap-5">
       <Tabs items={tabs} value={tab} onChange={setTab} label={t('title')} variant="underline" />
 
       {visible.length === 0 ? (
@@ -130,13 +130,13 @@ export function SavedBoard({
           <p className="type-body-lg text-text-secondary">{t('emptyTitle')}</p>
         </Card>
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
           {visible.map((entry) => {
             const deadline = entry.opportunity.deadline ? new Date(entry.opportunity.deadline) : null;
             const urgency = deadlineUrgency(deadline);
             return (
               <li key={entry.savedId}>
-                <Card padding="default" className="flex flex-col gap-3">
+                <Card padding="default" className="flex h-full flex-col gap-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <h3 className="type-heading-sm text-text-primary">

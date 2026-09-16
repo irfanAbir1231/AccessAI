@@ -24,7 +24,7 @@ export interface CatalogNode {
 
 export const catalog = {
   common: {
-    appName: ['অ্যাকসেসএআই', 'AccessAI'],
+    appName: ['নাগরিক সেবা', 'AccessAI'],
     tagline: ['প্রত্যেক নাগরিকের জন্য একজন এআই সহকারী।', 'One AI Assistant for Every Citizen.'],
     loading: ['একটু অপেক্ষা করুন…', 'One moment…'],
     save: ['সেভ করুন', 'Save'],

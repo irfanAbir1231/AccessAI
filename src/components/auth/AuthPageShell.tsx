@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { LocaleSwitcher } from '@/components/layout/LocaleSwitcher';
 import { VoiceProvider } from '@/components/providers/VoiceProvider';
+import { BrandLogo } from '@/components/layout/BrandLogo';
 
 /**
  * Chrome for the authentication screens.
@@ -29,8 +30,8 @@ export async function AuthPageShell({ children }: { readonly children: ReactNode
 
   return (
     <VoiceProvider authenticated={false}>
-      <div className="flex min-h-screen flex-col bg-canvas-plain">
-        <header className="flex h-appbar items-center justify-between gap-3 px-4 pt-safe">
+      <div className="portal-auth flex min-h-screen flex-col bg-canvas">
+        <header className="flex min-h-20 items-center justify-between gap-3 border-b border-stroke-subtle bg-surface px-4 pt-safe">
           <Link
             href="/"
             className="inline-flex min-h-12 items-center gap-2 rounded-md px-2 type-label-lg text-text-primary hover:bg-surface-sunken focus-visible:outline-3 focus-visible:outline-stroke-focus focus-visible:outline-offset-2"
@@ -41,8 +42,11 @@ export async function AuthPageShell({ children }: { readonly children: ReactNode
           <LocaleSwitcher compact />
         </header>
 
-        <main id="main" className="flex flex-1 items-start justify-center px-4 pb-16 pt-4">
-          {children}
+        <main id="main" className="flex flex-1 items-start justify-center px-4 pb-16 pt-10">
+          <div className="w-full max-w-form">
+            <Link href="/" className="mb-6 inline-flex min-h-12 items-center gap-3 rounded-md"><BrandLogo size={48} /><span className="type-heading-sm text-text-primary">{tc('appName')}</span></Link>
+            {children}
+          </div>
         </main>
       </div>
     </VoiceProvider>

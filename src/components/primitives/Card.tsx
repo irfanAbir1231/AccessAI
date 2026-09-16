@@ -45,7 +45,7 @@ export function Card({
     <Component
       data-elevated=""
       className={cn(
-        'rounded-lg border border-stroke-subtle',
+        'portal-card rounded-lg border border-stroke-subtle',
         selected ? 'border-1.5 border-stroke-brand shadow-elev-2' : 'shadow-elev-1',
         TONE[tone],
         PADDING[padding],
@@ -65,6 +65,7 @@ export function Section({
   children,
   className,
   headingLevel = 'h2',
+  tourId,
 }: {
   readonly title?: string;
   readonly description?: string;
@@ -72,12 +73,13 @@ export function Section({
   readonly children: ReactNode;
   readonly className?: string;
   readonly headingLevel?: 'h2' | 'h3';
+  readonly tourId?: string;
 }) {
   const Heading = headingLevel;
   return (
-    <section className={cn('flex flex-col gap-3', className)}>
+    <section data-tour={tourId} className={cn('portal-section flex flex-col gap-4', className)}>
       {title ? (
-        <div className="flex items-baseline justify-between gap-3">
+        <div className="portal-section-heading flex flex-wrap items-baseline justify-between gap-3">
           <div className="min-w-0">
             <Heading className={cn(headingLevel === 'h2' ? 'type-heading-md' : 'type-heading-sm', 'text-text-primary')}>
               {title}

@@ -110,7 +110,7 @@ export function OpportunityBrowser({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="portal-opportunity-browser flex flex-col gap-5">
       {/* -------------------------------------------------------- search */}
       <form
         onSubmit={(e) => {
@@ -140,7 +140,7 @@ export function OpportunityBrowser({
       </form>
 
       {/* ------------------------------------------------------ filters */}
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 no-scrollbar md:-mx-5 md:px-5">
+      <div className="portal-filter-panel flex gap-2 overflow-x-auto rounded-lg border border-stroke-subtle bg-surface p-4 no-scrollbar xl:flex-wrap" role="group" aria-label={locale === 'bn' ? 'কর্মসূচি ফিল্টার ও সাজানো' : 'Programme filters and sorting'}>
         <Button
           variant="secondary"
           size="sm"
